@@ -10,7 +10,6 @@ Program ROS 2 untuk menggerakkan robot pada simulasi membentuk lintasan persegi 
 - Rotasi 90 derajat
 - Mengulangi hingga membentuk persegi panjang
 - Menggunakan TF `odom -> base_footprint`
-- Kontrol proporsional (slow-down) mendekati target untuk mengurangi overshoot
 - Robot berhenti setelah menyelesaikan lintasan
 
 ## Menjalankan
