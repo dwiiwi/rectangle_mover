@@ -14,9 +14,9 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='dwislam',
-    maintainer_email='dwislam@todo.todo',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='dwiaqidah3@gmail.com',
+    description='ROS 2 node to move a robot in a rectangular path using TF feedback.',
+    license='Apache-2.0',
     extras_require={
         'test': [
             'pytest',
@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-		  'rectangle_node = rectangle_mover.rectangle_node:main'
+            'rectangle_node = rectangle_mover.rectangle_node:main'
         ],
     },
 )

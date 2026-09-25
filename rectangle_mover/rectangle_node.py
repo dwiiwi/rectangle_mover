@@ -1,16 +1,32 @@
+# Copyright 2026 dwislam
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""ROS 2 node that drives a robot in a rectangular trajectory using TF feedback."""
+
 import math
 
+from geometry_msgs.msg import Twist
 import rclpy
 from rclpy.node import Node
-
-from geometry_msgs.msg import Twist
-
 import tf2_ros
 
 
 class RectangleMover(Node):
+    """Move a robot along a rectangular path using odom -> base_footprint TF."""
 
     def __init__(self):
+        """Initialize publisher, TF listener, control timer and state."""
         super().__init__('rectangle_mover')
 
         # Publisher untuk mengirim perintah ke robot
@@ -65,12 +81,12 @@ class RectangleMover(Node):
             'Rectangle Mover started.'
         )
 
-    # =========================================================
-    # GET ROBOT TRANSFORM
-    # =========================================================
-
     def update_robot_pose(self):
+        """
+        Update current pose from the odom -> base_footprint TF.
 
+        Returns True if the TF lookup succeeded, False otherwise.
+        """
         try:
 
             transform = self.tf_buffer.lookup_transform(
@@ -112,12 +128,8 @@ class RectangleMover(Node):
 
             return False
 
-    # =========================================================
-    # NORMALIZE ANGLE
-    # =========================================================
-
     def normalize_angle(self, angle):
-
+        """Wrap an angle to the range [-pi, pi]."""
         while angle > math.pi:
             angle -= 2.0 * math.pi
 
@@ -126,12 +138,8 @@ class RectangleMover(Node):
 
         return angle
 
-    # =========================================================
-    # DISTANCE
-    # =========================================================
-
     def distance_from_start(self):
-
+        """Return Euclidean distance from the pose recorded at start_forward()."""
         dx = self.current_x - self.start_x
         dy = self.current_y - self.start_y
 
@@ -140,41 +148,25 @@ class RectangleMover(Node):
             dy * dy
         )
 
-    # =========================================================
-    # START FORWARD
-    # =========================================================
-
     def start_forward(self):
-
+        """Record the current pose as the origin for a forward segment."""
         self.start_x = self.current_x
         self.start_y = self.current_y
 
-    # =========================================================
-    # START TURN
-    # =========================================================
-
     def start_turn(self):
-
+        """Record the current yaw as the origin for a turn segment."""
         self.start_yaw = self.current_yaw
 
-    # =========================================================
-    # CHECK TURN
-    # =========================================================
-
     def turn_completed(self):
-
+        """Return True if the accumulated turn has reached turn_angle."""
         angle = self.normalize_angle(
             self.current_yaw - self.start_yaw
         )
 
         return abs(angle) >= self.turn_angle
 
-    # =========================================================
-    # CONTROL LOOP
-    # =========================================================
-
     def control_loop(self):
-
+        """Run one FSM step: read TF, compute command, publish, transition state."""
         # Update posisi robot dari TF
         if not self.update_robot_pose():
             return
@@ -374,12 +366,8 @@ class RectangleMover(Node):
         self.cmd_pub.publish(msg)
 
 
-# =============================================================
-# MAIN
-# =============================================================
-
 def main(args=None):
-
+    """Entry point: spin the RectangleMover node until interrupted."""
     rclpy.init(args=args)
 
     node = RectangleMover()

@@ -3,9 +3,9 @@
 <package format="3">
   <name>rectangle_mover</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="dwislam@todo.todo">dwislam</maintainer>
-  <license>TODO: License declaration</license>
+  <description>ROS 2 node to move a differential-drive robot in a rectangular trajectory using TF feedback (odom -> base_footprint).</description>
+  <maintainer email="dwiaqidah3@gmail.com">dwislam</maintainer>
+  <license>Apache-2.0</license>
 
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
