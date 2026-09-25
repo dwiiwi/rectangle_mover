@@ -21,11 +21,4 @@ cd ~/ros2_ws
 colcon build --packages-select rectangle_mover
 source install/setup.bash
 
-Jalankan Simulasi:
 
-ros2 launch robin_bringup my_robot_gazebo.launch.py
-
-Buka terminal lain, dan jalankan:
-
-source ~/ros2_ws/install/setup.bash
-ros2 run rectangle_mover rectangle_node
